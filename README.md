@@ -46,7 +46,7 @@ Learnify is a **production-style full-stack e-learning platform** built to demon
 
 ## 🗂 Project Structure (Simplified)
 
-
+```bash
 e-learning-platform/
 │
 ├── backend/
@@ -56,7 +56,9 @@ e-learning-platform/
 │   │   ├── models/
 │   │   ├── middleware/
 │   │   └── server.js
-│   └── uploads/certificates/
+│   │
+│   └── uploads/
+│       └── certificates/
 │
 ├── frontend/
 │   ├── src/
@@ -67,32 +69,39 @@ e-learning-platform/
 │
 └── README.md
 
-
 ---
 
 ## 🔐 Security Highlights
-- **Passwords hashed** using bcrypt
+- Passwords hashed using **bcrypt**
 - **JWT-based** authentication
 - **Role-based access** (Admin / User)
-- **Protected** frontend & backend routes
+- Protected frontend & backend routes
 
 ---
 
 ## ⚙️ Local Setup
 
 ### 📂 Backend
+```bash
 cd backend
 npm install
 npm run dev
 
+
+---
+
 ### 📂 Frontend
+```bash
 cd frontend
 npm install
 npm run dev
 
-> **URLs:**
-> - Frontend: http://localhost:5173
-> - Backend: http://localhost:5000
+
+---
+
+### 🔗 URLs
+- Frontend: http://localhost:5173
+- Backend: http://localhost:5000
 
 ---
 
@@ -106,5 +115,3 @@ npm run dev
 
 ## 👨‍💻 Author
 **Farhan Gheri**
-
-
