@@ -1,8 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
 import { FaGraduationCap } from "react-icons/fa";
+import { useState } from "react";
 
 const Header = () => {
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+
   const token = localStorage.getItem("token");
 
   let role = null;
@@ -17,7 +20,8 @@ const Header = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    navigate("/login");
+    navigate("/"); // 👈 Yahan change kiya hai: Ab Home page par jayega
+    setOpen(false);
   };
 
   return (
@@ -26,9 +30,11 @@ const Header = () => {
 
         {/* 🔷 LOGO */}
         <div className="flex items-center gap-3 select-none">
-          <div className="w-9 h-9 rounded-xl 
+          <div
+            className="w-9 h-9 rounded-xl 
             bg-gradient-to-br from-emerald-400 to-cyan-500 
-            flex items-center justify-center shadow-lg">
+            flex items-center justify-center shadow-lg"
+          >
             <FaGraduationCap className="text-black" size={16} />
           </div>
 
@@ -42,13 +48,11 @@ const Header = () => {
           </div>
         </div>
 
-        {/* 🔗 NAV */}
-        <nav className="flex items-center gap-3 text-sm font-medium">
-
+        {/* 🔗 DESKTOP NAV */}
+        <nav className="hidden md:flex items-center gap-3 text-sm font-medium">
           <NavLink to="/" label="Home" />
           <NavLink to="/courses" label="Courses" />
 
-          {/* 👤 GUEST */}
           {!token && (
             <>
               <Link
@@ -60,7 +64,6 @@ const Header = () => {
                 Login
               </Link>
 
-              {/* ✅ Get Started → Signup (Mobile Safe) */}
               <Link
                 to="/signup"
                 className="px-3 py-1.5 rounded-lg 
@@ -72,7 +75,6 @@ const Header = () => {
             </>
           )}
 
-          {/* 🟢 LOGGED IN */}
           {token && (
             <>
               <NavLink to="/dashboard" label="Dashboard" />
@@ -81,8 +83,7 @@ const Header = () => {
                 <Link
                   to="/admin"
                   className="px-2 py-1 rounded-lg 
-                  bg-red-500 text-white 
-                  hover:bg-red-600 transition"
+                  bg-red-500 text-white hover:bg-red-600 transition"
                 >
                   Admin
                 </Link>
@@ -99,12 +100,68 @@ const Header = () => {
             </>
           )}
         </nav>
+
+        {/* 🍔 MOBILE HAMBURGER (FULL 3 LINES) */}
+        <button
+          onClick={() => setOpen(!open)}
+          className="md:hidden flex flex-col justify-center gap-1.5 w-8 h-8"
+        >
+          <span
+            className={`h-[2px] w-full bg-white rounded transition ${
+              open ? "rotate-45 translate-y-[6px]" : ""
+            }`}
+          />
+          <span
+            className={`h-[2px] w-full bg-white rounded transition ${
+              open ? "opacity-0" : ""
+            }`}
+          />
+          <span
+            className={`h-[2px] w-full bg-white rounded transition ${
+              open ? "-rotate-45 -translate-y-[6px]" : ""
+            }`}
+          />
+        </button>
       </div>
+
+      {/* 📱 MOBILE MENU */}
+      {open && (
+        <div className="md:hidden bg-slate-900 border-t border-slate-800 px-4 py-4 space-y-3">
+          <MobileLink to="/" label="Home" setOpen={setOpen} />
+          <MobileLink to="/courses" label="Courses" setOpen={setOpen} />
+
+          {!token && (
+            <>
+              <MobileLink to="/login" label="Login" setOpen={setOpen} />
+              <MobileLink to="/signup" label="Signup" setOpen={setOpen} />
+            </>
+          )}
+
+          {token && (
+            <>
+              <MobileLink to="/dashboard" label="Dashboard" setOpen={setOpen} />
+
+              {role === "admin" && (
+                <MobileLink to="/admin" label="Admin" setOpen={setOpen} />
+              )}
+
+              <button
+                onClick={handleLogout}
+                className="w-full text-left px-3 py-2 rounded-lg 
+                border border-red-400 text-red-400 
+                hover:bg-red-400 hover:text-black transition"
+              >
+                Logout
+              </button>
+            </>
+          )}
+        </div>
+      )}
     </header>
   );
 };
 
-/* 🔹 NavLink */
+/* 🔹 Desktop NavLink */
 const NavLink = ({ to, label }) => (
   <Link
     to={to}
@@ -115,6 +172,18 @@ const NavLink = ({ to, label }) => (
       className="absolute left-0 -bottom-1 w-0 h-[2px] 
       bg-emerald-400 group-hover:w-full transition-all"
     />
+  </Link>
+);
+
+/* 📱 Mobile NavLink */
+const MobileLink = ({ to, label, setOpen }) => (
+  <Link
+    to={to}
+    onClick={() => setOpen(false)}
+    className="block px-3 py-2 rounded-lg 
+    text-gray-300 hover:bg-slate-800 hover:text-white transition"
+  >
+    {label}
   </Link>
 );
 
